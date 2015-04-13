@@ -92,7 +92,7 @@ class Datahandler:
 		return map(lambda (time,opinion):(time,0 if opinion < 0.0 else 1),self.getAllOpinionBeforeTimeById(timestamp,nodeId))
 
 	def getAllDiscreteOpinionOnorAfterTimeById(self,timestamp,nodeId): # get all opinions >= time for a node DISCRETE
-		return map(lambda (time,opinion):(time,0 if opinion < 0.0 else 1),self.getAllOpinionOnOrAfterTimeById(timestamp,nodeId))		
+		return map(lambda (time,opinion):(time,0 if opinion < 0.0 else 1),self.getAllOpinionOnorAfterTimeById(timestamp,nodeId))		
 
 	def getOpinionBeforeTimeById(self,timestamp,nodeId):
 		# gives all opinion for a node strictly before a timeStamp
@@ -100,7 +100,7 @@ class Datahandler:
 		prevX = -1
 		prevY = -1
 		found = 0
-		for (x,y) in self.opinionDict[nodeId]: # need to replace by binary search
+		for (x,y) in self.opinionDict[nodeId]:
 			if x >= timestamp:
 				if (found == 0):
 					return None
@@ -116,44 +116,12 @@ class Datahandler:
 		if(opinion == None):
 			return None
 		opinionValue = opinion[1]
-		# if(opinionValue > 0):
-		# 	return 1
-		# if(opinionValue < 0):
-		# 	return 0
-		return self.continousToDiscteteOpinion(opinionValue)
-
-	def getTimeStampCount(self):
-		# if the time stamps are t0,t1, .... ,tn-1 then this will return n
-		return max(map(lambda nodeOpinions: max(map(lambda (time,opinion): time,nodeOpinions)),self.opinionDict)) 
-
-	def continousToDiscteteOpinion(self,opinionValue):
 		if(opinionValue > 0):
 			return 1
 		if(opinionValue < 0):
 			return 0
 
-	def getOpinionIfAvailableByNodeId(self,timestamp,nodeId):
-	    minTime = 0
-	    maxTime = len(self.opinionDict[nodeId])-1
-	    while True:
-	    	if maxTime < minTime:
-	    		return None
-	    	midTime = (maxTime + minTime) // 2
-	    	if self.opinionDict[nodeId][midTime][0] < timestamp:
-	    		minTime = midTime + 1
-	    	elif self.opinionDict[nodeId][midTime][0] > timestamp:
-	    		maxTime = midTime - 1
-	    	else:
-	    		return self.continousToDiscteteOpinion(self.opinionDict[nodeId][midTime][1])
-	def getOpinionsForAllNodesIfAvailable(self,timestamp):
-		opinionList = {}
-		for nodeId in self.nodeList:
-			currentOpinion = self.getOpinionIfAvailableByNodeId(timestamp,nodeId)
-			if(currentOpinion != None):
-				opinionList[nodeId] = currentOpinion
-			else:
-				pass
-		return opinionList
+
 ######################### functions to access private data #########################
 	def getNodeList(self):
 		return self.nodeList

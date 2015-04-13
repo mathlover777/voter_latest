@@ -8,8 +8,8 @@ import numpy as np
 inf = 0.0
 
 def streamprinter(text):
-    # sys.stdout.write(text)
-    # sys.stdout.flush()
+    sys.stdout.write(text)
+    sys.stdout.flush()
     return
 
 def solveConcave(constraints,expressionList):
@@ -92,11 +92,15 @@ def solveConcave(constraints,expressionList):
 			oprfo = []
 			oprgo = []
 			oprho = []
-			oprho = map(lambda (x,y):0.0,expressionList)
+			oprho = map(lambda (x,y,z):0.0,expressionList)
 
-			for i in xrange(0,len(expressionList)):
-				oprfo.append(-1.0)
+			for f in expressionList:
+				oprfo.append(f[2])
 				oprgo.append(1.0)
+
+			# for i in xrange(0,len(expressionList)):
+			# 	oprfo.append(-1.0)
+			# 	oprgo.append(1.0)
 
 			# print "oprfo ", oprfo
 			# print "oprgo", oprgo
@@ -235,7 +239,7 @@ def fill_bux(constraintsSize, expressionListSize):
 
 def getVariableIndexes(expressionIndex,expressionList):
 	retList = []
-	(x,y) = expressionList[expressionIndex]
+	(x,y,z) = expressionList[expressionIndex]
 	for (i,j) in x:
 		retList.append(i)
 	# print retList
@@ -244,7 +248,7 @@ def getVariableIndexes(expressionIndex,expressionList):
 def giveCoefficient(variableIndex,expressionList,expressionIndex):
 	# returns co-efficient if not 0
 	# else None
-	(x,y) = expressionList[expressionIndex]
+	(x,y,z) = expressionList[expressionIndex]
 	for (i,j) in x:
 		if variableIndex==i:
 			return j

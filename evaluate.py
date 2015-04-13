@@ -38,22 +38,12 @@ def nextOpinion(G, LastOpinion, currnode, Opinions, X = None, isRandom = False):
 	return new_opinion
 
 
-def writeToFile(time, matchNode):
-	with open("MatchPercent.txt", "a") as myfile:
-		myfile.write('***************************************** [time = ' + str(time) + ']\n')
-		myfile.write(str(matchNode) + '\n')
-
-def resetFile():
-	with open("MatchPercent.txt", "w+") as f:
-		print 'log reset done'
-
-def findMatchPercentage(actualOpinions, predictedOpinions, time):	
+def findMatchPercentage(actualOpinions, predictedOpinions):	
 
 	matching = 0.0
 	total_opinions = 0
 	opinions_matched = 0
 
-	matchNode = []
 	for node in predictedOpinions:
 
 		preOp = predictedOpinions[node]
@@ -61,7 +51,6 @@ def findMatchPercentage(actualOpinions, predictedOpinions, time):
 
 		if (preOp>=0 and actOp>=0) or (preOp<=0 and actOp<=0):
 			opinions_matched = opinions_matched+1
-			matchNode.append(int(node))
 		total_opinions = total_opinions+1
 
 
@@ -70,8 +59,6 @@ def findMatchPercentage(actualOpinions, predictedOpinions, time):
 	# print matching
 	# print opinions_matched
 	# print total_opinions
-	matchNode.sort()
-	writeToFile(time, matchNode)
 	return matching
 		
 
@@ -83,12 +70,10 @@ def calculateCase1(actualOpinions,G,X):
 
 		new_opinion = {}
 
-		# print(time),' : ',
 		for currnode in xrange(0,len(G)):
 			new_opinion[str(currnode)] = nextOpinion(G,LastOpinion, currnode, actualOpinions, X)
 
-		matchingCase1[time] = findMatchPercentage(actualOpinions[str(time)], new_opinion, time)
-		# print " "
+		matchingCase1[time] = findMatchPercentage(actualOpinions[str(time)], new_opinion)
 		LastOpinion = new_opinion
 
 	print "case1: ", matchingCase1
@@ -107,7 +92,7 @@ def calculateCase2(actualOpinions,G,X):
 		for currnode in xrange(0,len(G)):
 			new_opinion[currnode] = nextOpinion(G,LastOpinion, currnode, actualOpinions, X)
 
-		matchingCase2[time] = findMatchPercentage(actualOpinions[str(time)], new_opinion, time)
+		matchingCase2[time] = findMatchPercentage(actualOpinions[str(time)], new_opinion)
 
 
 	print "case2: ", matchingCase2
@@ -125,7 +110,7 @@ def randomCase1(actualOpinions,G,X):
 		for currnode in xrange(0,len(G)):
 			new_opinion[str(currnode)] = nextOpinion(G,LastOpinion, currnode, actualOpinions, X, True)
 
-		matchingCase1[time] = findMatchPercentage(actualOpinions[str(time)], new_opinion, time)
+		matchingCase1[time] = findMatchPercentage(actualOpinions[str(time)], new_opinion)
 		LastOpinion = new_opinion
 
 	print "Random case1: ", matchingCase1
@@ -144,7 +129,7 @@ def randomCase2(actualOpinions,G,X):
 		for currnode in xrange(0,len(G)):
 			new_opinion[currnode] = nextOpinion(G,LastOpinion, currnode, actualOpinions, X, True)
 
-		matchingCase2[time] = findMatchPercentage(actualOpinions[str(time)], new_opinion, time)
+		matchingCase2[time] = findMatchPercentage(actualOpinions[str(time)], new_opinion)
 
 	print "Random case2: ", matchingCase2
 	return matchingCase2
@@ -155,11 +140,10 @@ def evaluate(actualOpinionFile):
 	X = utility.loadJsonObject(config.adjacencyName)
 	G = utility.loadJsonObject(config.synthetic_adjacency)
 
-	resetFile()
-	# calculateCase1(actualOpinions,G,X)
+	calculateCase1(actualOpinions,G,X)
 	calculateCase2(actualOpinions,G,X)
-	# randomCase1(actualOpinions,G,X)
-	# randomCase2(actualOpinions,G,X)
+	randomCase1(actualOpinions,G,X)
+	randomCase2(actualOpinions,G,X)
 	# print actualOpinions['39']
 
 def main():

@@ -57,22 +57,27 @@ def solverTest():
 	# minimize (-log(1-0.6x - 0.3z)-log(0.1y+z) -log(1-0.05z-x-y)) over 0<=1.0x+1y+1.0z<=1, 0<=x<=1, 0<=y<=1, 0<=z<=1
 	# solution = SC.solveConcave([0,1,2],[([(0,-0.6),(2,-0.3)],1.0),([(1,0.1),(2,1.0)],0),([(2,-0.05),(0,-1.0),(1,-1.0)],1.0)])
 	# solution = SC.solveConcave([0,1,2],[([(0,1.0),(1,1.0)],0.0),([(1,1.0),(2,1.0)],0.0),([(2,1.0),(0,1.0)],0.0)])
-	solution = SC.solveConcave([0,1,2],[([(0,2.0),(1,3.0)],0.0),([(1,3.0),(2,5.0)],0.0),([(2,1.0),(0,2.0)],0.0)])
+	# solution = SC.solveConcave([0,1,2],[([(0,2.0),(1,3.0)],0.0),([(1,3.0),(2,5.0)],0.0),([(2,1.0),(0,2.0)],0.0)])
+
+	# Version3
+	# minimize -2log(.5x+y)-3log(-.1x-.2y+1) on 0<x+y<1,0<x<1,0<y<1
+	# solution = SC.solveConcave([0,1],[([(0,0.5),(1,1)],0.0,-2),([(0,-0.1),(1,-0.2)],1.0,-3)])
+
+	# minimize -2log(.5x+y+z)-3log(-.1x-.2y-.5z+1)-.5log(.3x+.3y+.5z) on 0<x+y+z<1,0<x<1,0<y<1,0<z<1
+	solution = SC.solveConcave([0,1,2],[([(0,0.5),(1,1),(2,1)],0.0,-2.0), ([(0,-0.1),(1,-0.2),(2,-0.5)],1.0,-3.0), ([(0,0.3),(1,0.3),(2,0.5)],0.0,-0.5)])
+
 	print solution
 	print 'mosek tested'
 ############################################################################
 def testDataHandler():
 	D = datahandler.Datahandler(config.datasetName)
-	print D.getTimeStampCount()
-	# D.saveAsJson()
+	D.saveAsJson()
 	# print 'here'
 def main():
 	# test()
 	# analyze()
-
-	# solverTest()
+	solverTest()
 	# computeAndSaveA(1355750721,[4221,14062])
-	testDataHandler()
-	print '\n'
+	# testDataHandler()
 
 if __name__ == "__main__": main()
